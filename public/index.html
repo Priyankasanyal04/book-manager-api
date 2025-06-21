@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>📚 Book Manager</title>
+</head>
+<body>
+  <h1>Book Manager</h1>
+
+  <form id="bookForm">
+    <input type="text" id="title" placeholder="Title" required />
+    <input type="text" id="author" placeholder="Author" />
+    <input type="text" id="genre" placeholder="Genre" />
+    <input type="number" id="year" placeholder="Published Year" />
+    <button type="submit">Add Book</button>
+  </form>
+
+  <ul id="bookList"></ul>
+
+  <script>
+    const form = document.getElementById('bookForm');
+    const list = document.getElementById('bookList');
+
+    async function fetchBooks() {
+      const res = await fetch('/api/books');
+      const data = await res.json();
+      list.innerHTML = '';
+      data.forEach(book => {
+        const li = document.createElement('li');
+        li.innerHTML = `${book.title} by ${book.author} <button onclick="deleteBook('${book._id}')">Delete</button>`;
+        list.appendChild(li);
+      });
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const book = {
+        title: document.getElementById('title').value,
+        author: document.getElementById('author').value,
+        genre: document.getElementById('genre').value,
+        publishedYear: parseInt(document.getElementById('year').value)
+      };
+      await fetch('/api/books', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(book)
+      });
+      form.reset();
+      fetchBooks();
+    });
+
+    async function deleteBook(id) {
+      await fetch(`/api/books/${id}`, { method: 'DELETE' });
+      fetchBooks();
+    }
+
+    fetchBooks();
+  </script>
+</body>
+</html>
