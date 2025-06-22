@@ -36,9 +36,15 @@ This is a full-stack Book Manager app built with Node.js, Express, MongoDB Atlas
 
 ---
 
+
 ## 💻 Running Locally
 
 Once the server is running:
 👉 http://localhost:5000
 
+---
+
+## ✅ Test Coverage Report
+
+![Coverage Screenshot](./coverage/coverage.png)
 
